@@ -14,31 +14,33 @@
 
 package store
 
-import (
-	"sync"
-)
-
-// Command is ...
-type Command struct {
-	// Get, Put, PutIf, Scan, ...
-	// Ops for updating ranges
-	t int32
+// MemDB is a simple in-memory key value store. It is used primarily
+// for testing.
+//
+// This implements some KV interface
+type MemDB struct {
+	m map[string][]byte
 }
 
-// CmdQueue is ...
-type CmdQueue struct {
-	cmds []*Command
-	sync.Mutex
+// NewMemDB is ..
+func NewMemDB() *MemDB {
+	return &MemDB{
+		m: make(map[string][]byte),
+	}
 }
 
-// NewCmdQueue returns a new
-func NewCmdQueue() *CmdQueue {
-	return &CmdQueue{}
+// Put ...
+func (db *MemDB) Put(key []byte, val []byte) error {
+	db.m[string(key)] = val
+	return nil
 }
 
-// Add adds ...
-func (q *CmdQueue) Add(cmd *Command) {
-	q.Lock()
-	defer q.Unlock()
-	q.cmds = append(q.cmds, cmd)
+// Get ...
+func (db *MemDB) Get(key []byte) ([]byte, error) {
+	val, _ := db.m[string(key)]
+	//	if !ok {
+	//	}
+	return val, nil
 }
+
+// Get and Scan?

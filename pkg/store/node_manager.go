@@ -14,31 +14,17 @@
 
 package store
 
-import (
-	"sync"
-)
-
-// Command is ...
-type Command struct {
-	// Get, Put, PutIf, Scan, ...
-	// Ops for updating ranges
-	t int32
+// HealthChecker monitors the status of each node by
+// periodically sending heartbeat requests.
+// It can consist of multiple gorountines, each of which
+// is responsible for a subset of nodes (simple sharding
+// by node IDs).
+type HealthChecker struct {
 }
 
-// CmdQueue is ...
-type CmdQueue struct {
-	cmds []*Command
-	sync.Mutex
-}
+// NodeManager keeks track of the state of each node.
+type NodeManager struct {
+	mStore *MasterStore
 
-// NewCmdQueue returns a new
-func NewCmdQueue() *CmdQueue {
-	return &CmdQueue{}
-}
-
-// Add adds ...
-func (q *CmdQueue) Add(cmd *Command) {
-	q.Lock()
-	defer q.Unlock()
-	q.cmds = append(q.cmds, cmd)
+	healthChecker HealthChecker
 }

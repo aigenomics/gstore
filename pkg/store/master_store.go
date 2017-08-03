@@ -15,30 +15,40 @@
 package store
 
 import (
-	"sync"
+	"github.com/google/btree"
+	"github.com/google/uuid"
 )
 
-// Command is ...
-type Command struct {
-	// Get, Put, PutIf, Scan, ...
-	// Ops for updating ranges
-	t int32
+// Range is ...
+type Range struct {
+	id       uuid.UUID
+	keyRange KeyRange
+
+	// nodePlacements
 }
 
-// CmdQueue is ...
-type CmdQueue struct {
-	cmds []*Command
-	sync.Mutex
+// Node is ...
+type Node struct {
+	id uuid.UUID
+	// status, attributes
 }
 
-// NewCmdQueue returns a new
-func NewCmdQueue() *CmdQueue {
-	return &CmdQueue{}
+// Txn ...
+type Txn struct {
+	id uuid.UUID
 }
 
-// Add adds ...
-func (q *CmdQueue) Add(cmd *Command) {
-	q.Lock()
-	defer q.Unlock()
-	q.cmds = append(q.cmds, cmd)
+// MasterStore is ...
+type MasterStore struct {
+	ranges *btree.BTree
+	nodes  map[uuid.UUID]*Node
+	txns   map[uuid.UUID]*Txn
+
+	// A KV store with RAFT-based replication.
+	// Used to store persistent data that can be accessed from multiple hosts.
+	//
+	//
+	db *MemDB
 }
+
+// ranges: btree.New(4 /* degree */),

@@ -20,20 +20,18 @@ import (
 	"sync"
 )
 
-// Txn ...
-type Txn struct {
-	id uuid.UUID
-}
-
 // TxnManager ...
 type TxnManager struct {
-	txnMap map[uuid.UUID]*Txn
+	mState *MasterState
+
 	sync.Mutex
 }
 
 // NewTxnManager ...
 func NewTxnManager() *TxnManager {
-	return &TxnManager{}
+	return &TxnManager{
+	//		txnMap: make(map[uuid.UUID]*Txn),
+	}
 }
 
 // OpenTxn ...
@@ -42,7 +40,7 @@ func (tm *TxnManager) OpenTxn() *Txn {
 	defer tm.Unlock()
 
 	txn := &Txn{id: uuid.New()}
-	tm.txnMap[txn.id] = txn
+	//	tm.txnMap[txn.id] = txn
 
 	return txn
 }
@@ -52,10 +50,5 @@ func (tm *TxnManager) CloseTxn(txn *Txn) {
 	tm.Lock()
 	defer tm.Unlock()
 
-	delete(tm.txnMap, txn.id)
-}
-
-// String ...
-func (tm *TxnManager) String() string {
-	return ""
+	//	delete(tm.txnMap, txn.id)
 }

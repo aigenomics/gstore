@@ -13,22 +13,3 @@
 // limitations under the License.
 
 package store
-
-// Key is ...
-type Key uint64
-
-// Range is ...
-type Range struct {
-	startKey, endKey Key
-
-	// rangeaGroup: A set of Node IDs that are responsible for a given range.
-	rangeInstances [](*RangeInstance)
-}
-
-// NewRange is ...
-func NewRange(startKey, endKey Key) *Range {
-	return &Range{
-		startKey: startKey,
-		endKey:   endKey,
-	}
-}
