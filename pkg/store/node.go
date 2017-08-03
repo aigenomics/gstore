@@ -18,12 +18,18 @@ import (
 	"github.com/google/uuid"
 )
 
-// Node is ...
-type Node struct {
+// NodeD is a deamon running each host and ...
+type NodeD struct {
 	id uuid.UUID
 
+	// Ranges where the node is responsible for.
+	ranges map[uuid.UUID]KeyRange
+
+	// Local store (will be backed by RocksDB)
+	db       *MemDB
 	cmdQueue *CmdQueue
-	// local store
 }
 
-// ....
+// Run ...
+func (n *NodeD) Run() {
+}

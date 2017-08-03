@@ -13,3 +13,29 @@
 // limitations under the License.
 
 package store
+
+import (
+	"testing"
+)
+
+func TestGetAndPut(t *testing.T) {
+	db := NewMemDB()
+
+	key := []byte("key")
+
+	if v, err := db.Get(key); err != nil || string(v) != "" {
+		// and val
+		t.Error(err)
+	}
+
+	val := []byte("val")
+	if err := db.Put(key, val); err != nil {
+		t.Error(err)
+	}
+
+	if v, err := db.Get(key); err != nil || string(v) != string(val) {
+		// and val
+		t.Error(err)
+	}
+
+}

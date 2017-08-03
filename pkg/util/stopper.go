@@ -12,33 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package store
+package util
 
-import (
-	"sync"
-)
-
-// Command is ...
-type Command struct {
-	// Get, Put, PutIf, Scan, ...
-	// Ops for updating ranges
-	t int32
+// Stopper is ..
+type Stopper struct {
+	c chan struct{}
 }
 
-// CmdQueue is ...
-type CmdQueue struct {
-	cmds []*Command
-	sync.Mutex
+// NewStopper ..
+func NewStopper() *Stopper {
+	return &Stopper{
+		c: make(chan struct{}),
+	}
 }
 
-// NewCmdQueue returns a new
-func NewCmdQueue() *CmdQueue {
-	return &CmdQueue{}
+// IsStopped ...
+func (s *Stopper) IsStopped() bool {
+	// Non-blocking chann
+	//	switch s.c {
+
+	//	}
+	return false
 }
 
-// Add adds ...
-func (q *CmdQueue) Add(cmd *Command) {
-	q.Lock()
-	defer q.Unlock()
-	q.cmds = append(q.cmds, cmd)
+// Stop ...
+func (s *Stopper) Stop() {
+	close(s.c)
 }

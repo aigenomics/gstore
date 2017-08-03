@@ -14,31 +14,27 @@
 
 package store
 
-import (
-	"sync"
-)
+// Key is ...
+type Key []byte
 
-// Command is ...
-type Command struct {
-	// Get, Put, PutIf, Scan, ...
-	// Ops for updating ranges
-	t int32
+//
+
+// KeyRange is ...
+type KeyRange struct {
+	// inclusive startKey and exclusive endKey.
+	startKey, endKey Key
 }
 
-// CmdQueue is ...
-type CmdQueue struct {
-	cmds []*Command
-	sync.Mutex
+// NewKeyRange is ...
+func NewKeyRange(startKey, endKey Key) *KeyRange {
+	return &KeyRange{
+		startKey: startKey,
+		endKey:   endKey,
+	}
 }
 
-// NewCmdQueue returns a new
-func NewCmdQueue() *CmdQueue {
-	return &CmdQueue{}
-}
-
-// Add adds ...
-func (q *CmdQueue) Add(cmd *Command) {
-	q.Lock()
-	defer q.Unlock()
-	q.cmds = append(q.cmds, cmd)
-}
+// KeyPartition.
+//
+// We probably need to partition the key space into three disjoint spaces
+// (one for regular KV, another for erasure coding, and the last one for
+// columnar).

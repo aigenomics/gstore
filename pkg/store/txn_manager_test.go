@@ -20,7 +20,7 @@ import (
 
 func Test(t *testing.T) {
 	tm := NewTxnManager()
-	if s := tm.String(); s != "" {
-		t.Error("err")
-	}
+
+	txn := tm.OpenTxn()
+	tm.CloseTxn(txn)
 }

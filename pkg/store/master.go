@@ -14,15 +14,50 @@
 
 package store
 
-// Master is ...
-type Master struct {
-	rManager   RangeManager
-	txnManager TxnManager
+import (
+	"github.com/aigenomics/gstore/pkg/util"
+	"golang.org/x/net/context"
+)
 
-	// Data replication and leader election are done by RAFT.
+// APIServer provdes the RPC/HTTP interface (to end clients).
+type APIServer struct {
+}
+
+// Master manages ranges and nodes.
+//
+// Master needs to replicate its state.
+//
+// Master needs leader election.
+//
+// Master doesn't need to be a single process running on oen machine.
+// It can be split into multiple processes distribute d
+type Master struct {
+	rangeManager *RangeManager
+
+	nodeManager *NodeManager
+
+	// We call this transaction for convenience, but unlike
+	// traditional database, it just manages the states of clients
+	// writing to the store (maybe read too).
+	txnManager *TxnManager
+
+	apiServer *APIServer
+
+	masterStore *MasterStore
+
+	stopper *util.Stopper
 }
 
 // NewMaster ...
 func NewMaster() *Master {
 	return &Master{}
+}
+
+// Run ...
+func (m *Master) Run(ctx context.Context) {
+}
+
+// Stop ...
+func (m *Master) Stop() {
+	m.stopper.Stop()
 }
